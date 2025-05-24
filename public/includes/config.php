@@ -1,5 +1,5 @@
 <?php
 
-define("BASE_URL", "http://localhost/pago-web/");
+define("BASE_URL", "http://localhost/pagos-web/");
 
 

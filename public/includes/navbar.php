@@ -9,7 +9,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="<?= BASE_URL?>">Beneficiario</a>
-        <a class="nav-link" href="<?= BASE_URL?>/app/views/contratos/list.php">Contratos</a>
+        <a class="nav-link" href="<?= BASE_URL?>public/views/contrato/">Contratos</a>
         <a class="nav-link" href="<?= BASE_URL?>/app/views/pagos/list.php">Pagos</a>
       
       </div>
