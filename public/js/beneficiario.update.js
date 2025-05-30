@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (idbeneficiario) {
         try {
-            const response = await fetch(`http://localhost/pagos-web/app/controllers/BeneficiarioController.php?id=${idbeneficiario}`);
+            const response = await fetch(`http://localhost/pagos-web/app/controllers/BeneficiarioController.php?id=${idbeneficiario}`,{method:'GET'});
             const result = await response.json();
 
             if (response.ok && result.status) {
@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const formData = new FormData(beneficiarioForm);
         const data = Object.fromEntries(formData.entries());
-
         data.idbeneficiario = idbeneficiarioInput.value;
 
         try {

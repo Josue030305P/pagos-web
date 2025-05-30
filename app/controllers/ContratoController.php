@@ -20,11 +20,6 @@ switch ($method) {
 
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
-        if (!isset($data['idbeneficiario'], $data['monto'], $data['interes'], $data['fechainicio'], $data['diapago'], $data['numcuotas'])) {
-            echo json_encode(["status" => false, "message" => "Faltan datos para crear el contrato."]);
-            exit;
-        }
-
         $idbeneficiario = (int) $data['idbeneficiario'];
         $monto = (float) $data['monto'];
         $interes = (float) $data['interes'];
@@ -56,16 +51,35 @@ switch ($method) {
             }
 
             $idcontrato = $contratoResult['id'];
-
             $tasaPeriodica = $interes / 100;
             $valorCuotaFija = round(Pago($tasaPeriodica, $numcuotas, $monto), 2);
 
+            $fechaInicio = new DateTime($fechainicio);
+
             for ($i = 1; $i <= $numcuotas; $i++) {
-                $pagoResult = $pagoModel->saveCuota($idcontrato, $i, $valorCuotaFija);
+               
+                $fechaCuota = clone $fechaInicio;
+                $fechaCuota->modify("+" . ($i - 1) . " month");
+
+                
+                $ultimoDiaMes = (int) $fechaCuota->format('t');
+                $diaPagoReal = min($diapago, $ultimoDiaMes);
+                $fechaCuota->setDate(
+                    (int) $fechaCuota->format('Y'),
+                    (int) $fechaCuota->format('m'),
+                    $diaPagoReal
+                );
+
+                $fechaPagoStr = $fechaCuota->format('Y-m-d');
+
+                $pagoResult = $pagoModel->saveCuota($idcontrato, $i, $fechaPagoStr, $valorCuotaFija);
 
                 if (!$pagoResult['status']) {
                     $contratoModel->getConexion()->rollBack();
-                    echo json_encode(["status" => false, "message" => "Error al guardar la cuota {$i} en la tabla de pagos: " . $pagoResult['message']]);
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Error al guardar la cuota {$i} en la tabla de pagos: " . $pagoResult['message']
+                    ]);
                     exit;
                 }
             }

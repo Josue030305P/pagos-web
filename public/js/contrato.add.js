@@ -1,5 +1,5 @@
-
-
+document.addEventListener('DOMContentLoaded', async () => {
+    
         const showToast = (icon, title) => {
             const Toast = Swal.mixin({
                 toast: true,
@@ -27,7 +27,7 @@
                 const response = await fetch(`http://localhost/pagos-web/app/controllers/BeneficiarioController.php?dni=${dni}`);
                 const result = await response.json();
 
-                if (result.status && result.data) {
+                if (result.status) {
                     document.getElementById('nombreBeneficiario').value = `${result.data.nombres} ${result.data.apellidos}`;
                     document.getElementById('idBeneficiario').value = result.data.idbeneficiario;
                     showToast('success', 'Beneficiario encontrado.');
@@ -53,14 +53,7 @@
             }
 
             const formData = new FormData(event.target);
-            const data = {
-                idbeneficiario: parseInt(idBeneficiario),
-                monto: parseFloat(formData.get('monto')),
-                interes: parseFloat(formData.get('interes')),
-                fechainicio: formData.get('fechainicio'),
-                diapago: parseInt(formData.get('diapago')),
-                numcuotas: parseInt(formData.get('numcuotas'))
-            };
+            const data = Object.fromEntries(formData.entries());
 
        
             if (isNaN(data.monto) || data.monto <= 0 ||
@@ -96,3 +89,4 @@
                 showToast('error', 'Error de conexión al intentar crear el contrato. Intenta de nuevo más tarde.');
             }
         });
+});

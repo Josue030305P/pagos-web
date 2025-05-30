@@ -117,5 +117,29 @@ CALL sp_add_contrato (5,3000,5,'2025-30-05','29',12);
 DROP PROCEDURE sp_add_contrato;
 
 
+-- DELIMITER //
+-- CREATE PROCEDURE sp_add_pago(
+--     IN idbeneficiario_ INT,
+--     IN monto_ DECIMAL(7,2),
+--     IN interes_ DECIMAL(5,2),
+--     IN fechainicio_ DATE,
+--     IN diapago_ TINYINT,
+--     IN numcuotas_ TINYINT
+-- )
+-- BEGIN 
+--     INSERT INTO contratos(idbeneficiario, monto, interes, fechainicio, diapago, numcuotas)
+--             VALUES(idbeneficiario_, monto_, interes_, fechainicio_, diapago_, numcuotas_);
+--         SELECT  LAST_INSERT_ID() AS idcontrato;
+-- END //
+
+-- DELIMITER  ;
+
+    
+-- CALL sp_add_contrato (5,3000,5,'2025-30-05','29',12);
+-- DROP PROCEDURE sp_add_contrato;
+
+
+
+
 
    

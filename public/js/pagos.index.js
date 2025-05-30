@@ -14,22 +14,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   const errorMessage = document.getElementById("error-message");
 
   if (!idContrato) {
-    loadingDetailsMessage.style.display = 'none';
-    loadingCronogramaMessage.style.display = 'none';
+    loadingDetailsMessage.style.display = "none";
+    loadingCronogramaMessage.style.display = "none";
     errorMessage.textContent = "Error: ID de contrato no especificado.";
-    errorMessage.style.display = 'block';
+    errorMessage.style.display = "block";
     return;
   }
 
-  const controllerUrl = `http://localhost/pagos-web/app/controllers/PagoController.php?id=${idContrato}`;
+
 
   try {
-    const response = await fetch(controllerUrl);
+    const response = await fetch(`http://localhost/pagos-web/app/controllers/PagoController.php?id=${idContrato}`);
     loadingDetailsMessage.style.display = "none";
     loadingCronogramaMessage.style.display = "none";
-    if (!response.ok) {
-      throw new Error(`Error HTTP! estado: ${response.status}`);
-    }
+    
     const result = await response.json();
 
     if (result.status) {
@@ -144,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         totalRow.insertCell().textContent = "";
       } else {
         tablaPagosBody.innerHTML = `<tr><td colspan="6" class="text-center">No se pudo generar el cronograma de pagos para este contrato.</td></tr>`;
-        tablaPagosFooter.innerHTML = '';
+        tablaPagosFooter.innerHTML = "";
       }
     } else {
       errorMessage.textContent =
@@ -157,8 +155,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadingDetailsMessage.style.display = "none";
     loadingCronogramaMessage.style.display = "none";
     errorMessage.textContent = `Error al cargar el cronograma: ${error.message}.`;
-    errorMessage.style.display = 'block';
+    errorMessage.style.display = "block";
     tablaPagosBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error al cargar el cronograma. ${error.message}</td></tr>`;
-    tablaPagosFooter.innerHTML = '';
+    tablaPagosFooter.innerHTML = "";
   }
 });

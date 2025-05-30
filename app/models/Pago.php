@@ -11,30 +11,26 @@ class Pago
         $this->conexion = Database::getConexion();
     }
 
-    public function saveCuota(int $idcontrato, int $numcuota, float $monto, float $penalidad = 0.00): array
+    public function saveCuota(int $idcontrato, int $numcuota,$fechaPago, float $monto, float $penalidad = 0.00): array
     {
         try {
-            $sql = "INSERT INTO pagos (idcontrato, numcuota, monto, penalidad) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO pagos (idcontrato, numcuota,fechapago, monto, penalidad) VALUES (?, ?, ?, ?,?)";
             $stmt = $this->conexion->prepare($sql);
-            $stmt->execute([$idcontrato, $numcuota, $monto, $penalidad]); 
+            $stmt->execute([$idcontrato, $numcuota,$fechaPago, $monto, $penalidad]);
 
             return ["status" => true, "message" => "Cuota guardada exitosamente."];
         } catch (PDOException $e) {
-            error_log("Error en Pago::saveCuota: " . $e->getMessage());
+
             return ["status" => false, "message" => "Error al guardar cuota: " . $e->getMessage()];
         }
     }
 
 
 
-    
-    public function getById(int $idcontrato): array
+    public function getById($idcontrato): array
     {
         try {
-            $sql = "SELECT c.idcontrato, c.idbeneficiario, b.apellidos, b.nombres, c.monto, c.interes, c.fechainicio, c.diapago, c.numcuotas, c.estado 
-                    FROM contratos c
-                    JOIN beneficiarios b ON c.idbeneficiario = b.idbeneficiario
-                    WHERE c.idcontrato = ?";
+            $sql = "SELECT * FROM list_contrato_pagos WHERE idcontrato = ?";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([$idcontrato]);
             $contrato = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -59,3 +55,6 @@ class Pago
         }
     }
 }
+
+// $pago = new Pago();
+// var_dump($pago->getById(1));

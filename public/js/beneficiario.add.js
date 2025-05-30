@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const beneficiarioForm = document.getElementById('beneficiarioForm');
     const showToast = (icon, title) => {
         const Toast = Swal.mixin({
@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             title: title
         });
     };
-
-
 
     beneficiarioForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -45,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json();
 
-            if (response.ok && result.status) {
+            if (result.status) {
                 showToast('success', result.message || 'Beneficiario agregado exitosamente.');
                 beneficiarioForm.reset();
                 beneficiarioForm.classList.remove('was-validated');
