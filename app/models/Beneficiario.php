@@ -19,7 +19,7 @@ class Beneficiario
   public function getByDni(string $dni): array
     {
         try {
-            $sql = "SELECT idbeneficiario, apellidos, nombres, dni FROM beneficiarios WHERE dni = ?";
+            $sql ="CALL sp_getBYDNI_beneficiario(?)";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([$dni]);
             $beneficiario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,7 +30,6 @@ class Beneficiario
                 return ["status" => false, "message" => "Beneficiario no encontrado."];
             }
         } catch (PDOException $e) {
-            error_log("Error en Beneficiario::getByDni: " . $e->getMessage());
             return ["status" => false, "message" => "Error interno del servidor al buscar beneficiario por DNI."];
         }
     }
@@ -42,7 +41,7 @@ class Beneficiario
 
         $result = [];
 
-        $sql = "SELECT idbeneficiario, apellidos, nombres, dni, telefono, direccion FROM beneficiarios";
+        $sql = "CALL sp_getAll_beneficiarios()";
         $stmt = $this->conexion->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -51,7 +50,6 @@ class Beneficiario
           "status" => true,
           "data" => $result
         ];
-
 
     } catch(PDOException $e) {
       throw new PDOException($e->getMessage());
@@ -115,10 +113,10 @@ class Beneficiario
 
 
 
-    public function getById(int $idbeneficiario): array
+  public function getById(int $idbeneficiario): array
     {
         try {
-            $sql = "SELECT idbeneficiario, apellidos, nombres, dni, telefono, direccion FROM beneficiarios WHERE idbeneficiario = ?";
+            $sql = "CALL sp_getBYID_beneficiarios(?);";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([$idbeneficiario]);
             $beneficiario = $stmt->fetch(PDO::FETCH_ASSOC); 

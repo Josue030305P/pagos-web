@@ -39,11 +39,9 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
           if ($result['status'] && $result['data']) {
             echo json_encode(["status" => true, "data" => $result['data']]);
           } else {
-            http_response_code(404);
             echo json_encode(["status" => false, "message" => "Beneficiario con DNI {$dni} no encontrado."]);
           }
         } else {
-          http_response_code(400);
           echo json_encode(["status" => false, "message" => "DNI no proporcionado."]);
         }
 

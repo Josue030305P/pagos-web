@@ -14,14 +14,12 @@ switch ($method) {
             $result = $contratoModel->getAll();
             echo json_encode($result);
         } catch (PDOException $e) {
-
             echo json_encode(["status" => false, "message" => "Error al obtener todos los contratos: " . $e->getMessage()]);
         }
         break;
 
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
-
         if (!isset($data['idbeneficiario'], $data['monto'], $data['interes'], $data['fechainicio'], $data['diapago'], $data['numcuotas'])) {
             echo json_encode(["status" => false, "message" => "Faltan datos para crear el contrato."]);
             exit;
@@ -35,7 +33,6 @@ switch ($method) {
         $numcuotas = (int) $data['numcuotas'];
 
         if ($monto <= 0 || $interes < 0 || $numcuotas <= 0 || $diapago < 1 || $diapago > 31) {
-            http_response_code(400);
             echo json_encode(["status" => false, "message" => "Valores de contrato inválidos."]);
             exit;
         }
@@ -43,7 +40,7 @@ switch ($method) {
         try {
             $contratoModel->getConexion()->beginTransaction();
 
-            $contratoResult = $contratoModel->create([
+            $contratoResult = $contratoModel->add([
                 'idbeneficiario' => $idbeneficiario,
                 'monto' => $monto,
                 'interes' => $interes,
@@ -54,7 +51,6 @@ switch ($method) {
 
             if (!$contratoResult['status']) {
                 $contratoModel->getConexion()->rollBack();
-
                 echo json_encode($contratoResult);
                 exit;
             }

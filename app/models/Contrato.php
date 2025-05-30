@@ -22,9 +22,7 @@ class Contrato
 
     public function getAll(): array {
         try {
-            $sql = "SELECT c.idcontrato, b.apellidos, b.nombres, c.monto, c.interes, c.fechainicio, c.diapago, c.numcuotas, c.estado 
-                    FROM contratos c
-                    JOIN beneficiarios b ON c.idbeneficiario = b.idbeneficiario";
+            $sql = "SELECT * FROM list_contratos";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -42,24 +40,25 @@ class Contrato
         }
     }
 
-    public function create(array $data): array
+    public function add($params = []): array
     {
         try {
-            $sql = "INSERT INTO contratos (idbeneficiario, monto, interes, fechainicio, diapago, numcuotas) 
-                    VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "CALL sp_add_contrato(?, ?, ?, ?, ?, ?)";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([
-                $data['idbeneficiario'],
-                $data['monto'],
-                $data['interes'],
-                $data['fechainicio'],
-                $data['diapago'],
-                $data['numcuotas']
+                $params['idbeneficiario'],
+                $params['monto'],
+                $params['interes'],
+                $params['fechainicio'],
+                $params['diapago'],
+                $params['numcuotas']
             ]);
 
-            return ["status" => true, "message" => "Contrato creado exitosamente.", "id" => $this->conexion->lastInsertId()];
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $idcontrato = $result['idcontrato'] ?? null;
+
+            return ["status" => true, "message" => "Contrato creado exitosamente.", "id" => $idcontrato ];
         } catch (PDOException $e) {
-            error_log("Error en Contrato::create: " . $e->getMessage());
             return ["status" => false, "message" => "Error al crear el contrato: " . $e->getMessage()];
         }
     }
@@ -70,6 +69,15 @@ class Contrato
 
 }
 
-// $contrto = new Contrato();
+// $contrato = new Contrato();
 
-// var_dump($contrto->getAll());
+// $params  = [
+//     'idbeneficiario' =>7, 
+//     'monto' => 3000,
+//     'interes' => 5,
+//     'fechainicio' => '2025-30-05',
+//     'diapago' => '29',
+//     'numcuotas' => 12
+// ];
+
+// var_dump($contrato->create($params));

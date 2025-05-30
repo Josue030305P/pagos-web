@@ -67,7 +67,7 @@ INSERT INTO pagos(idcontrato, numcuota, fechapago, monto, penalidad, medio)
 				(1,11,NULL, 338.48, 0, NULL),
 				(1,12,NULL, 338.48, 0, NULL);
         
-
+SELECT * FROM beneficiarios;
 SELECT * FROM contratos;
 SELECT * FROM pagos;
 
