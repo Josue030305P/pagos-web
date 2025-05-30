@@ -73,7 +73,7 @@ require_once '../../includes/config.php';
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary btn px-4">Actualizar Beneficiario</button>
-                            <a href="<?= BASE_URL ?>beneficiarios/" class="btn btn-secondary btn px-4">Cancelar y
+                            <a href="<?= BASE_URL ?>" class="btn btn-secondary btn px-4">Cancelar y
                                 Volver</a>
                         </div>
                     </form>

@@ -8,6 +8,7 @@ class Contrato
 {
     private $conexion;
 
+
     public function __construct()
     {
         $this->conexion = Database::getConexion();
@@ -40,39 +41,6 @@ class Contrato
             ];
         }
     }
-
-    public function getById(int $idcontrato): array
-    {
-        try {
-            $sql = "SELECT c.idcontrato, c.idbeneficiario, b.apellidos, b.nombres, c.monto, c.interes, c.fechainicio, c.diapago, c.numcuotas, c.estado 
-                    FROM contratos c
-                    JOIN beneficiarios b ON c.idbeneficiario = b.idbeneficiario
-                    WHERE c.idcontrato = ?";
-            $stmt = $this->conexion->prepare($sql);
-            $stmt->execute([$idcontrato]);
-            $contrato = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($contrato) {
-                return [
-                    "status" => true,
-                    "data" => $contrato
-                ];
-            } else {
-                return [
-                    "status" => false,
-                    "message" => "Contrato no encontrado."
-                ];
-            }
-        } catch (PDOException $e) {
-            error_log("Error en Contrato::getById: " . $e->getMessage());
-            return [
-                "status" => false,
-                "message" => "Error interno del servidor al obtener contrato por ID: " . $e->getMessage()
-            ];
-        }
-    }
-
-
 
     public function create(array $data): array
     {

@@ -1,5 +1,7 @@
+
 CREATE DATABASE prestamos;
 DROP DATABASE prestamos;
+
 USE prestamos;
 
 
@@ -69,8 +71,6 @@ INSERT INTO pagos(idcontrato, numcuota, fechapago, monto, penalidad, medio)
 SELECT * FROM contratos;
 SELECT * FROM pagos;
 
-
-
 -- ¿CUANTOS PAGOS PENDIENTE TIENE JOSUE?
 
 SELECT COUNT(*) FROM pagos WHERE idcontrato = 1 AND fechapago IS NULL;
@@ -86,3 +86,6 @@ SELECT COUNT(*) FROM pagos WHERE idcontrato = 1 AND fechapago AND  medio = 'EFC'
 
 -- TOTAL DE PENALIDADES PAGAS CON DEPOSITO
 SELECT SUM(penalidad) FROM pagos WHERE idcontrato = 1 AND fechapago AND  medio = 'DEP';
+
+SELECT * FROM contratos where idcontrato=7; 
+SELECT * FROM  pagos WHERE idcontrato=7;
